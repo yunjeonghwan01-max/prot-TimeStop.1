@@ -16,6 +16,9 @@ enum State { IDLE, STOP_CAST, FROZEN, STUNNED, ATTACKING }
 @export var attack_damage := 15
 @export var melee_range := 70.0
 @export var attack_time := 0.22
+@export var knockback_x := 220.0
+@export var knockback_y := 260.0
+@export var show_melee_gizmo := true
 @export var body_color := Color(0.3, 0.85, 0.85)
 @export var opponent: Actor
 
@@ -27,6 +30,7 @@ var stop_target: Actor = null
 var stop_cooldown_left := 0.0
 var hp := 100
 var is_dead := false
+var knockback_vel_x := 0.0
 
 @onready var body: ColorRect = $Body
 @onready var status_label: Label = $StatusLabel
@@ -37,6 +41,7 @@ func _ready() -> void:
 	add_to_group("duel_actor")
 	hp = max_hp
 	body.pivot_offset = body.size * 0.5
+	queue_redraw()
 	_update_look()
 
 
@@ -73,14 +78,20 @@ func try_attack() -> void:
 	stun_kind = ""
 	if opponent != null and is_instance_valid(opponent) and not opponent.is_dead:
 		if global_position.distance_to(opponent.global_position) <= melee_range:
-			opponent.take_damage(attack_damage)
+			opponent.take_damage(attack_damage, self)
 	_update_look()
 
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, from: Actor = null) -> void:
 	if is_dead:
 		return
 	hp = maxi(hp - amount, 0)
+	if from != null:
+		var dir := signf(global_position.x - from.global_position.x)
+		if dir == 0.0:
+			dir = 1.0
+		knockback_vel_x = dir * knockback_x
+		velocity.y = -knockback_y
 	if hp <= 0:
 		_die()
 	_update_look()
@@ -154,7 +165,14 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = minf(velocity.y, 0.0)
 
-	if state == State.IDLE and not is_dead:
+	if absf(knockback_vel_x) > 1.0:
+		velocity.x = knockback_vel_x
+		knockback_vel_x = move_toward(knockback_vel_x, 0.0, knockback_x * 4.0 * delta)
+		if state != State.IDLE:
+			state_time -= delta
+			if state_time <= 0.0:
+				_on_state_timeout()
+	elif state == State.IDLE and not is_dead:
 		velocity.x = move_axis * move_speed
 	else:
 		velocity.x = 0.0
@@ -164,6 +182,7 @@ func _physics_process(delta: float) -> void:
 				_on_state_timeout()
 
 	move_and_slide()
+	queue_redraw()
 	_update_look()
 
 
@@ -214,3 +233,10 @@ func _update_look() -> void:
 			body.color = body_color
 			status_label.text = ""
 	body.scale = Vector2(pulse, pulse)
+
+
+func _draw() -> void:
+	if not show_melee_gizmo:
+		return
+	var gizmo_color := Color(1.0, 0.85, 0.2, 0.7)
+	draw_arc(Vector2.ZERO, melee_range, 0.0, TAU, 48, gizmo_color, 2.0, true)
