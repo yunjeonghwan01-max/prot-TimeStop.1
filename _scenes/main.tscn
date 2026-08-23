@@ -2,10 +2,60 @@
 
 [ext_resource type="Script" uid="uid://1v42i2u64m44" path="res://_scripts/main.tscn.gd" id="1_dmym1"]
 [ext_resource type="PackedScene" uid="uid://ccec0fumldw1y" path="res://_scenes/toolkit.tscn" id="2_x6rnu"]
+[ext_resource type="PackedScene" path="res://_scenes/actor.tscn" id="3_actor"]
+[ext_resource type="Script" uid="uid://b0kiaj5kfcbnl" path="res://_scripts/player.gd" id="4_player"]
+[ext_resource type="Script" uid="uid://cl2sa0yl6vddn" path="res://_scripts/enemy_ai.gd" id="5_enemy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1600, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(40, 800)
 
 [node name="main" type="Node2D" unique_id=722765371]
 script = ExtResource("1_dmym1")
 
 [node name="game" type="Node2D" parent="." unique_id=1636911038]
+
+[node name="Backdrop" type="ColorRect" parent="game" unique_id=1175751476]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.08, 0.09, 0.12, 1)
+
+[node name="Floor" type="StaticBody2D" parent="game" unique_id=1796605009]
+position = Vector2(640, 650)
+
+[node name="ColorRect" type="ColorRect" parent="game/Floor" unique_id=518514946]
+offset_left = -800.0
+offset_top = -30.0
+offset_right = 800.0
+offset_bottom = 30.0
+mouse_filter = 2
+color = Color(0.18, 0.18, 0.22, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="game/Floor" unique_id=961778071]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="WallLeft" type="StaticBody2D" parent="game" unique_id=1134608297]
+position = Vector2(0, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="game/WallLeft" unique_id=1769769894]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="WallRight" type="StaticBody2D" parent="game" unique_id=1537859896]
+position = Vector2(1280, 360)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="game/WallRight" unique_id=1965984438]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Player" parent="game" unique_id=1014297557 instance=ExtResource("3_actor")]
+position = Vector2(380, 500)
+script = ExtResource("4_player")
+
+[node name="Enemy" parent="game" unique_id=1939913609 instance=ExtResource("3_actor")]
+position = Vector2(900, 500)
+script = ExtResource("5_enemy")
+body_color = Color(0.9, 0.45, 0.2, 1)
 
 [node name="toolkit" parent="." unique_id=758752430 instance=ExtResource("2_x6rnu")]
