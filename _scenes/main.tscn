@@ -52,6 +52,7 @@ shape = SubResource("RectangleShape2D_wall")
 [node name="Player" parent="game" unique_id=1014297557 instance=ExtResource("3_actor")]
 position = Vector2(380, 500)
 script = ExtResource("4_player")
+knockback_x = 80.0
 
 [node name="Enemy" parent="game" unique_id=1939913609 instance=ExtResource("3_actor")]
 position = Vector2(900, 500)
