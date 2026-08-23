@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://1v42i2u64m44" path="res://_scripts/main.tscn.gd" id="1_dmym1"]
 [ext_resource type="PackedScene" uid="uid://ccec0fumldw1y" path="res://_scenes/toolkit.tscn" id="2_x6rnu"]
-[ext_resource type="PackedScene" path="res://_scenes/actor.tscn" id="3_actor"]
+[ext_resource type="PackedScene" uid="uid://fxferrv36kbe" path="res://_scenes/actor.tscn" id="3_actor"]
 [ext_resource type="Script" uid="uid://b0kiaj5kfcbnl" path="res://_scripts/player.gd" id="4_player"]
 [ext_resource type="Script" uid="uid://cl2sa0yl6vddn" path="res://_scripts/enemy_ai.gd" id="5_enemy"]
 
@@ -56,6 +56,14 @@ script = ExtResource("4_player")
 [node name="Enemy" parent="game" unique_id=1939913609 instance=ExtResource("3_actor")]
 position = Vector2(900, 500)
 script = ExtResource("5_enemy")
+weight_wait = 3.0
+weight_approach = 10.0
+weight_attack = 3.0
+weight_collapse = 8.0
+weight_stop = 14.0
+think_min = 0.4
+think_max = 1.0
+reaction_chance = 0.2
 body_color = Color(0.9, 0.45, 0.2, 1)
 
 [node name="toolkit" parent="." unique_id=758752430 instance=ExtResource("2_x6rnu")]

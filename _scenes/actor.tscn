@@ -1,41 +1,44 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://fxferrv36kbe"]
 
-[ext_resource type="Script" path="res://_scripts/actor.gd" id="1_actor"]
+[ext_resource type="Script" uid="uid://bdiymsgky83lu" path="res://_scripts/actor.gd" id="1_actor"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(40, 64)
 
-[node name="Actor" type="CharacterBody2D"]
-collision_layer = 1
-collision_mask = 1
+[node name="Actor" type="CharacterBody2D" unique_id=742490657]
 script = ExtResource("1_actor")
+move_speed = 500.0
+stop_cast_time = 0.6
+attack_damage = 2
+melee_range = 140.0
+attack_time = 0.5
+knockback_x = 880.0
+knockback_y = 300.0
 
-[node name="Body" type="ColorRect" parent="."]
+[node name="Body" type="ColorRect" parent="." unique_id=70083565]
 offset_left = -20.0
 offset_top = -64.0
 offset_right = 20.0
-offset_bottom = 0.0
-color = Color(0.3, 0.85, 0.85, 1)
 mouse_filter = 2
+color = Color(0.3, 0.85, 0.85, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1998778400]
 position = Vector2(0, -32)
 shape = SubResource("RectangleShape2D_body")
 
-[node name="StatusLabel" type="Label" parent="."]
+[node name="StatusLabel" type="Label" parent="." unique_id=1621683556]
 offset_left = -56.0
 offset_top = -92.0
 offset_right = 56.0
 offset_bottom = -68.0
 theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
-text = ""
 
-[node name="HpLabel" type="Label" parent="."]
+[node name="HpLabel" type="Label" parent="." unique_id=441674611]
 offset_left = -56.0
 offset_top = -112.0
 offset_right = 56.0
 offset_bottom = -92.0
 theme_override_font_sizes/font_size = 12
-horizontal_alignment = 1
 text = "HP 100"
+horizontal_alignment = 1
